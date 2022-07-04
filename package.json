@@ -9,7 +9,8 @@
     "dev": "webpack-dev-server --config ./example/webpack.config.cjs --hot",
     "test": "jest src",
     "lint": "eslint src/**/* example/src/**/* --ext .js,.ts,.tsx",
-    "typecheck": "tsc --noEmit"
+    "typecheck": "tsc --noEmit",
+    "prepare": "tsc"
   },
   "babel": {
     "presets": [
