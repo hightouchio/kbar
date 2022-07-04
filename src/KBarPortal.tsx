@@ -1,5 +1,5 @@
-import Portal from "@reach/portal";
 import * as React from "react";
+import { createPortal } from "react-dom";
 import { VisualState } from "./types";
 import { useKBar } from "./useKBar";
 
@@ -12,9 +12,26 @@ export function KBarPortal(props: Props) {
     showing: state.visualState !== VisualState.hidden,
   }));
 
-  if (!showing) {
+  const [target, setTarget] = React.useState<HTMLDivElement | undefined>();
+
+  React.useLayoutEffect(() => {
+    if (!showing) {
+      return;
+    }
+
+    const element = document.createElement("div");
+    document.body.append(element);
+    setTarget(element);
+
+    return () => {
+      element.remove();
+      setTarget(undefined);
+    };
+  }, [showing]);
+
+  if (!target) {
     return null;
   }
 
-  return <Portal>{props.children}</Portal>;
+  return createPortal(props.children, target);
 }
