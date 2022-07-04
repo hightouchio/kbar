@@ -64,6 +64,17 @@ export class ActionImpl implements Action {
         parentActionImpl,
         `attempted to create an action whos parent: ${action.parent} does not exist in the store.`
       );
+
+      const existingChildIndex = parentActionImpl.children.findIndex(
+        (existingAction) => {
+          return existingAction.id === action.id;
+        }
+      );
+
+      if (existingChildIndex >= 0) {
+        parentActionImpl.children.splice(existingChildIndex, 1);
+      }
+
       parentActionImpl.addChild(this);
     }
   }

@@ -37,6 +37,29 @@ describe("ActionImpl", () => {
     expect(parent.children[0]).toEqual(child);
   });
 
+  it("should be replace existing child with a new one", () => {
+    const parent = ActionImpl.create(createAction({ name: "parent" }), {
+      store: {},
+    });
+
+    expect(parent.children).toEqual([]);
+
+    const action = createAction({ name: "child", parent: parent.id });
+
+    const child = ActionImpl.create(action, {
+      store: { [parent.id]: parent },
+    });
+
+    expect(parent.children[0]).toEqual(child);
+
+    const childCopy = ActionImpl.create(action, {
+      store: { [parent.id]: parent },
+    });
+
+    expect(parent.children[0]).toEqual(childCopy);
+    expect(parent.children.length).toEqual(1);
+  });
+
   it("should be able to get children", () => {
     const parent = ActionImpl.create(createAction({ name: "parent" }), {
       store: {},
