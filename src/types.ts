@@ -18,7 +18,11 @@ export type Action = {
   shortcut?: string[];
   keywords?: string;
   section?: ActionSection;
-  icon?: string | React.ReactElement | React.ReactNode;
+  icon?:
+    | string
+    | React.ReactElement
+    | React.ReactNode
+    | React.ComponentType<unknown>;
   subtitle?: string;
   perform?: (currentActionImpl: ActionImpl) => any;
   parent?: ActionId;
