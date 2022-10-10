@@ -1,5 +1,5 @@
 import * as React from "react";
-import { useVirtual } from "@tanstack/react-virtual";
+import { useVirtualizer } from "@tanstack/react-virtual";
 import { ActionImpl } from "./action/ActionImpl";
 import { getListboxItemId, KBAR_LISTBOX } from "./KBarSearch";
 import { useKBar } from "./useKBar";
@@ -27,9 +27,10 @@ export const KBarResults: React.FC<KBarResultsProps> = (props) => {
   const itemsRef = React.useRef(props.items);
   itemsRef.current = props.items;
 
-  const rowVirtualizer = useVirtual({
-    size: itemsRef.current.length,
-    parentRef,
+  const rowVirtualizer = useVirtualizer({
+    count: props.items.length,
+    estimateSize: () => 80,
+    getScrollElement: () => parentRef.current,
   });
 
   const { query, search, currentRootActionId, activeIndex, options } = useKBar(
@@ -137,11 +138,12 @@ export const KBarResults: React.FC<KBarResultsProps> = (props) => {
         role="listbox"
         id={KBAR_LISTBOX}
         style={{
-          height: `${rowVirtualizer.totalSize}px`,
+          height: `${rowVirtualizer.getTotalSize()}px`,
           width: "100%",
+          position: "relative",
         }}
       >
-        {rowVirtualizer.virtualItems.map((virtualRow) => {
+        {rowVirtualizer.getVirtualItems().map((virtualRow) => {
           const item = itemsRef.current[virtualRow.index];
           const handlers = typeof item !== "string" && {
             onPointerMove: () =>
@@ -159,7 +161,7 @@ export const KBarResults: React.FC<KBarResultsProps> = (props) => {
               id={getListboxItemId(virtualRow.index)}
               role="option"
               aria-selected={active}
-              key={virtualRow.index}
+              key={typeof item === "string" ? item : item.id}
               style={{
                 position: "absolute",
                 top: 0,
@@ -175,7 +177,7 @@ export const KBarResults: React.FC<KBarResultsProps> = (props) => {
                   active,
                 }),
                 {
-                  ref: virtualRow.measureRef,
+                  ref: virtualRow.measureElement,
                 }
               )}
             </div>

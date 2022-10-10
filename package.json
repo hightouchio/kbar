@@ -58,7 +58,7 @@
     "webpack-dev-server": "^4.1.0"
   },
   "dependencies": {
-    "@tanstack/react-virtual": "^3.0.0-alpha.0",
+    "@tanstack/react-virtual": "^3.0.0-beta.18",
     "command-score": "^0.1.2",
     "fast-equals": "^2.0.3",
     "tiny-invariant": "^1.2.0"
