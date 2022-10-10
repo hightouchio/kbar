@@ -29,6 +29,7 @@ export const KBarResults: React.FC<KBarResultsProps> = (props) => {
 
   const rowVirtualizer = useVirtualizer({
     count: props.items.length,
+    enableSmoothScroll: false,
     estimateSize: () => 80,
     getScrollElement: () => parentRef.current,
   });
